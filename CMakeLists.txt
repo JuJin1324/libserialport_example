@@ -39,5 +39,11 @@ endif ()
 ### 공통 설정
 include_directories(${SERIAL_PORT_LIB_DIR}/include)
 
-add_executable(libserialport_example main.c)
-target_link_libraries(libserialport_example -L${SERIAL_PORT_LIB_DIR}/lib serialport)
+add_executable(nonblocking_read.out nonblocking_read.c serial_utils.c serial_utils.h)
+target_link_libraries(nonblocking_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
+
+add_executable(blocking_read.out blocking_read.c serial_utils.c serial_utils.h)
+target_link_libraries(blocking_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
+
+add_executable(send_and_read.out write_and_read.c serial_utils.c serial_utils.h)
+target_link_libraries(send_and_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)

@@ -3,37 +3,12 @@
 #include <unistd.h>  /* for sleep function */
 #include <libserialport.h>
 #include <stdlib.h>
+#include "serial_utils.h"
 
 #define MILLI_SECOND     (1000)
 #define MAX_BUF_LEN     512
 
 volatile sig_atomic_t stop_thread;   /* Ctrl+C 스탑 시그널 시 쓰레드 종료를 위한 변수 */
-
-struct sp_port *port;
-
-/* 기기에서 사용 가능 serial 포트 확인 */
-void list_ports() {
-    int i;
-    struct sp_port **ports;
-
-    enum sp_return error = sp_list_ports(&ports);
-    if (error == SP_OK) {
-        for (i = 0; ports[i]; i++) {
-            printf("Found port: '%s'\n", sp_get_port_name(ports[i]));
-        }
-        sp_free_port_list(ports);
-    } else {
-        printf("No serial devices detected\n");
-    }
-    printf("\n");
-}
-
-void parse_serial(char *byte_buff, int byte_num) {
-    for (int i = 0; i < byte_num; i++) {
-        printf("%c", byte_buff[i]);
-    }
-    printf("\n");
-}
 
 void sig_handler() {
     stop_thread = 1;
@@ -41,8 +16,9 @@ void sig_handler() {
 }
 
 int main() {
-    const char desired_port[] = "/dev/ttyS5";
-    const int desired_baudrate = 9600;
+    struct sp_port *port;
+    const char desired_port[] = "/dev/ttyHSL1";
+    const int desired_baudrate = 19200;
 
     char byte_buff[MAX_BUF_LEN];
     int byte_num = 0;
@@ -58,7 +34,7 @@ int main() {
     /* 기기에서 사용 가능 serial 포트 확인 */
     list_ports();
 
-    /* 기기에서 해당 포트 지원하는지 확인 */
+    /* /dev/ttyS5를 통해서 구조체 struct sp_port 가져오기 */
     enum sp_return error = sp_get_port_by_name(desired_port, &port);
     if (error != SP_OK) {
         printf("Error finding serial device\n");
@@ -73,6 +49,8 @@ int main() {
         sp_set_baudrate(port, desired_baudrate);
     } else {
         printf("Error opening serial device\n");
+        sp_free_port(port);
+
         return EXIT_FAILURE;
     }
 
@@ -91,6 +69,7 @@ int main() {
         fflush(stdout);
     }
     sp_close(port);
+    sp_free_port(port);
 
     return EXIT_SUCCESS;
 }
