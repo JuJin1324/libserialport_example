@@ -14,6 +14,7 @@
     - 위에서 다운로드 받은 파일이 `~/Downloads` 에 있다고 가정
 ```bash
 $ cd ~/Downloads
+$ wget http://sigrok.org/download/source/libserialport/libserialport-0.1.1.tar.gz
 $ tar -xvf libserialport-0.1.1.tar.gz
 $ cd libserialport-0.1.1
 ```
