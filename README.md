@@ -22,9 +22,9 @@ $ cd libserialport-0.1.1
   - 라이브러리 생성할 위치 : `/usr/local`
 ```bash
 $ ./configure 
-$ make clean
+$ sudo make clean
 $ make
-$ make install
+$ sudo make install
 ```
 
 * arm-linux 전용 libserialport 라이브러리 생성 명령어 
@@ -35,7 +35,7 @@ $ mkdir /usr/local/arm-linux-libserialport
 $ CC=arm-unknown-linux-gnueabi-gcc LD=arm-unknown-linux-gnueabi-ld CXX=arm-unknown-linux-gnueabi-c++ NM=arm-unknown-linux-gnueabi-nm OBJDUMP=arm-unknown-linux-gnueabi-objdump RANLIB=arm-unknown-linux-gnueabi-ranlib AR=arm-unknown-linux-gnueabi-ar ./configure --build=x86_64-apple-darwin`uname -r` --host=arm-linux --prefix=/usr/local/arm-linux-libserialport 
 
 ### 설치
-$ make clean
+$ sudo make clean
 $ make
 $ sudo make install
 ```
@@ -55,9 +55,9 @@ $ cd libserialport-0.1.1
 ```bash
 ### --prefix : 라이브러리 생성 디렉터리 셋팅
 $ ./configure --prefix=/usr
-$ make clean
+$ sudo make clean
 $ make
-$ make install
+$ sudo make install
 ```
 
 * arm-linux 전용 libserialport 라이브러리 생성 명령어 
@@ -67,9 +67,9 @@ armv7용 라이브러리를 설치할 디렉터리 생성 : $ mkdir /usr/arm-lin
 ### 라이브러리 생성관련 셋팅 
 $ CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-c++ ./configure --build=x86_64-linux-gnu --host=arm-linux --prefix=/usr/arm-linux-libserialport
 
-$ make clean
+$ sudo make clean
 $ make
-$ make install
+$ sudo make install
 ```
 * host(arm-linux)와 Cross Toolchain의 host triplet(arm-unknown-linux)이 일치하지 않아서 CC/CXX/LD/NM/OBJDUMP/RANLIB/AR을 직접 지정해주었다. 우분투의 경우 host(arm-linux)와 Cross Toolchain의 host triplet(arm-linux)로 일치하기 때문에 CC를 제외하고는 따로 지정해줄 필요가 없다.
 
