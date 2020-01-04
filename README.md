@@ -9,8 +9,8 @@ C언어 serial 통신 라이브러리
 
 ## libserialport 설치
 ### macOS
-* 다운로드 후 압축 풀기 및 디렉터리 이동
-    - 위에서 다운로드 받은 파일이 `~/Downloads` 에 있다고 가정
+* 다운 받을 디렉터리 : ~/Downloads
+* 다운로드 : wget
 ```bash
 $ cd ~/Downloads
 $ wget http://sigrok.org/download/source/libserialport/libserialport-0.1.1.tar.gz

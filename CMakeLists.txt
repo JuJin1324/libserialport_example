@@ -39,5 +39,5 @@ endif ()
 ### 공통 설정
 include_directories(${SERIAL_PORT_LIB_DIR}/include)
 
-add_executable(libserialport_example main.c)
+add_executable(libserialport_example src/main.c)
 target_link_libraries(libserialport_example -L${SERIAL_PORT_LIB_DIR}/lib serialport)
