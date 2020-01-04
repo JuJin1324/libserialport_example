@@ -1,4 +1,5 @@
 # libserialport example
+C언어 serial 통신 라이브러리 
 * [공식 페이지](https://sigrok.org/wiki/Libserialport)
 * 라이센스(license) 정보
     - LGPL(GNU Lesser General Public License)
@@ -7,8 +8,6 @@
     - [오픈소스SW 라이선스 LGPL 바로알기](https://openbee.kr/422)
 
 ## libserialport 설치
-* [libserialport-0.1.1.tar.gz 다운로드](http://sigrok.org/download/source/libserialport/libserialport-0.1.1.tar.gz)
-
 ### macOS
 * 다운로드 후 압축 풀기 및 디렉터리 이동
     - 위에서 다운로드 받은 파일이 `~/Downloads` 에 있다고 가정
