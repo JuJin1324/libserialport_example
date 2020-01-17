@@ -6,11 +6,10 @@
 #include <signal.h>  /* for using signal() */
 #include <libserialport.h>
 #include <stdlib.h>
-#include <string.h>
-#include "serial_utils.h"
+#include "utils/serial_utils.h"
 
-#define MILLI_SECOND     (1000)
-#define MAX_BUF_LEN     512
+#define MILLI_SECOND        (1000)
+#define MAX_BUF_LEN         (512)
 
 volatile sig_atomic_t stop_thread;   /* Ctrl+C 스탑 시그널 시 쓰레드 종료를 위한 변수 */
 
@@ -23,13 +22,11 @@ void sig_handler() {
 int main() {
     struct sp_port *port;
     const char desired_port[] = "/dev/ttyHSL1";
-    const int desired_baudrate = 19200;
-    const unsigned int serial_timeout = 100;   /* milli second */
+    const int desired_baud_rate = 19200;
+    const unsigned int serial_read_timeout = 100;   /* milli second */
 
-    char write_buff[MAX_BUF_LEN];
-    int write_num = 0;
-    char read_buff[MAX_BUF_LEN];
-    int read_num = 0;
+    char byte_buff[MAX_BUF_LEN];
+    int byte_num = 0;
 
     /*
      * 종료 시그널(Ctrl + C) 처리 변수 및 함수
@@ -39,7 +36,7 @@ int main() {
     signal(SIGINT, (void *) sig_handler);
 
     /* 기기에서 사용 가능 serial 포트 확인 */
-    list_ports();
+    print_available_ports_info();
 
     /* /dev/ttyS5를 통해서 구조체 struct sp_port 가져오기 */
     enum sp_return error = sp_get_port_by_name(desired_port, &port);
@@ -53,7 +50,7 @@ int main() {
     error = sp_open(port, SP_MODE_READ);
     if (error == SP_OK) {
         /* baudrate 설정 */
-        sp_set_baudrate(port, desired_baudrate);
+        sp_set_baudrate(port, desired_baud_rate);
     } else {
         printf("Error opening serial device\n");
         sp_free_port(port);
@@ -61,18 +58,12 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    strcpy(write_buff, "Command you want to send to serial device");
     /* 종료 시그널(Ctrl + C)을 받기 전까지 계속해서 시리얼 통신 */
     while (!stop_thread) {
-        /* blocking으로 쓰기 수행 */
-        write_num = sp_blocking_write(port, write_buff, MAX_BUF_LEN, serial_timeout);
-        if (write_num < 1)
-            continue;
-
-        /* blocking으로 읽기 수행 */
-        read_num = sp_blocking_read(port, read_buff, MAX_BUF_LEN, serial_timeout);
-        /* print read_buff */
-        parse_serial(read_buff, read_num);
+        /* blocking 으로 읽기 수행 */
+        byte_num = sp_blocking_read(port, byte_buff, MAX_BUF_LEN, serial_read_timeout);
+        /* print byte_buff */
+        parse_serial(byte_buff, byte_num);
     }
     sp_close(port);
     sp_free_port(port);

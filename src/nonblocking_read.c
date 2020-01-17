@@ -3,10 +3,10 @@
 #include <unistd.h>  /* for sleep function */
 #include <libserialport.h>
 #include <stdlib.h>
-#include "serial_utils.h"
+#include "utils/serial_utils.h"
 
-#define MILLI_SECOND     (1000)
-#define MAX_BUF_LEN     512
+#define MILLI_SECOND        (1000)
+#define MAX_BUF_LEN         (512)
 
 volatile sig_atomic_t stop_thread;   /* Ctrl+C 스탑 시그널 시 쓰레드 종료를 위한 변수 */
 
@@ -17,8 +17,8 @@ void sig_handler() {
 
 int main() {
     struct sp_port *port;
-    const char desired_port[] = "/dev/ttyHSL1";
-    const int desired_baudrate = 19200;
+    const char desired_port[] = "/dev/ttyS1";
+    const int desired_baud_rate = 19200;
 
     char byte_buff[MAX_BUF_LEN];
     int byte_num = 0;
@@ -32,7 +32,7 @@ int main() {
     signal(SIGINT, (void *) sig_handler);
 
     /* 기기에서 사용 가능 serial 포트 확인 */
-    list_ports();
+    print_available_ports_info();
 
     /* /dev/ttyS5를 통해서 구조체 struct sp_port 가져오기 */
     enum sp_return error = sp_get_port_by_name(desired_port, &port);
@@ -46,7 +46,7 @@ int main() {
     error = sp_open(port, SP_MODE_READ);
     if (error == SP_OK) {
         /* baudrate 설정 */
-        sp_set_baudrate(port, desired_baudrate);
+        sp_set_baudrate(port, desired_baud_rate);
     } else {
         printf("Error opening serial device\n");
         sp_free_port(port);

@@ -3,7 +3,7 @@ project(libserialport_example C)
 
 set(CMAKE_C_STANDARD 99)
 
-include_directories(/usr/local/include)
+include_directories(/usr/local/include src)
 
 set(ARM_LINUX_COMPILE ON)       # 이 셋팅을 주석 처리 혹은 주석 풀기를 통해서 arm-linux 로 컴파일 할지 x86_64 로 컴파일할지 선택
 
@@ -39,11 +39,14 @@ endif ()
 ### 공통 설정
 include_directories(${SERIAL_PORT_LIB_DIR}/include)
 
-add_executable(nonblocking_read.out nonblocking_read.c serial_utils.c serial_utils.h)
+add_executable(nonblocking_read.out src/nonblocking_read.c src/utils/serial_utils.c src/utils/serial_utils.h)
 target_link_libraries(nonblocking_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
 
-add_executable(blocking_read.out blocking_read.c serial_utils.c serial_utils.h)
+add_executable(blocking_read.out src/blocking_read.c src/utils/serial_utils.c src/utils/serial_utils.h)
 target_link_libraries(blocking_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
 
-add_executable(send_and_read.out write_and_read.c serial_utils.c serial_utils.h)
-target_link_libraries(send_and_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
+add_executable(write_and_read.out src/write_and_read.c src/utils/serial_utils.c src/utils/serial_utils.h)
+target_link_libraries(write_and_read.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
+
+add_executable(serial_info.out src/utils/serial_utils.c src/utils/serial_utils.h)
+target_link_libraries(serial_info.out -L${SERIAL_PORT_LIB_DIR}/lib serialport)
