@@ -14,7 +14,6 @@ C언어 serial 통신 라이브러리
 
 * MSYS2/MinGW를 사용하여 CLion 환경 구축하기 : [참조 사이트](https://github.com/JuJin1324/CLion_stater#microsoft-windows)
 * 라이브러리 설치를 위한 패키지 설치 : `pacman -S isl autoconf automake-wrapper libtool make`
-* MinGW용 라이브러리를 만들기 위한 GCC PATH 지정 : `echo -e '\nexport PATH="/mingw64/bin:$PATH"' >> ~/test.txt`
 * 라이브러리 생성 소스 다운로드를 위한 git 설치 : `pacman -S git`
 
 ### 라이브러리 생성
@@ -46,7 +45,6 @@ $ sudo make install
 
 ## 실행 환경(Target OS)이 arm-linux인 라이브러리 생성
 ### 라이브러리 생성 
-* --host : gcc 앞에 따로 prefix가 붙지 않음으로 사용 안함.
 * --prefix : 산출물을 담을 디렉터리 경로(여기서는 ~/Documents/dev/external/ARM-Linux 아래 설치)
 ```bash
 $ git clone git://sigrok.org/libserialport
