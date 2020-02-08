@@ -9,99 +9,61 @@ C언어 serial 통신 라이브러리
 * 정적 링크 사용시 상업에 사용하는 소스 공개 의무 <b>있음</b>
 * [오픈소스SW 라이선스 LGPL 바로알기](https://openbee.kr/422)
 
-## libserialport 설치
-### macOS
-다운로드 후 압축 풀기 및 디렉터리 이동
-* 다운로드 : wget
-* 다운 받을 디렉터리 : ~/Downloads
+## 설치 : Microsoft Windows
+<b>MSYS2 / MinGW 사용</b>   
 
+* MSYS2/MinGW를 사용하여 CLion 환경 구축하기 : [참조 사이트](https://github.com/JuJin1324/CLion_stater#microsoft-windows)
+* 라이브러리 설치를 위한 패키지 설치 : `pacman -S isl autoconf automake-wrapper libtool make`
+* MinGW용 라이브러리를 만들기 위한 GCC PATH 지정 : `echo -e '\nexport PATH="/mingw64/bin:$PATH"' >> ~/test.txt`
+* 라이브러리 생성 소스 다운로드를 위한 git 설치 : `pacman -S git`
+
+### 라이브러리 생성
+* --host : 산출될 라이브러리가 구동될 툴체인의 prefix(gcc 앞에 붙는 prefix)
+* --prefix : 산출물을 담을 디렉터리 경로(사용자 지정)
 ```bash
-$ cd ~/Downloads
-$ wget http://sigrok.org/download/source/libserialport/libserialport-0.1.1.tar.gz
-$ tar -xvf libserialport-0.1.1.tar.gz
-$ cd libserialport-0.1.1
+$ git clone git://sigrok.org/libserialport
+$ cd libserialport
+$ ./autogen.sh
+$ ./configure --host=x86_64-w64-mingw32 --prefix=$HOME/Documents/dev/external
+$ make clean
+$ make
+$ make install
 ```
 
-macOS 전용 libserialport 라이브러리 생성 명령어
-* 라이브러리 생성할 위치 : `/usr/local`
+## 설치 : macOS / Ubuntu(Linux)
+### 라이브러리 생성 
+* --host : gcc 앞에 따로 prefix가 붙지 않음으로 사용 안함.
+* --prefix : 산출물을 담을 디렉터리 경로(사용자 지정)
 ```bash
-$ ./configure 
-$ sudo make clean
-$ make
+$ git clone git://sigrok.org/libserialport
+$ cd libserialport
+$ ./autogen.sh
+$ ./configure --prefix=$HOME/Documents/dev/external
+$ make clean
+$ sudo make
 $ sudo make install
 ```
 
-arm-linux 전용 libserialport 라이브러리 생성 명령어 
-* 라이브러리 생성할 위치 : `/usr/local/arm-linux-libserialport`
+## 실행 환경(Target OS)이 arm-linux인 라이브러리 생성
+### 라이브러리 생성 
+* --host : gcc 앞에 따로 prefix가 붙지 않음으로 사용 안함.
+* --prefix : 산출물을 담을 디렉터리 경로(여기서는 ~/Documents/dev/external/ARM-Linux 아래 설치)
 ```bash
-### arm-linux 설치 관련 설정
-$ mkdir /usr/local/arm-linux-libserialport
-$ CC=arm-unknown-linux-gnueabi-gcc LD=arm-unknown-linux-gnueabi-ld CXX=arm-unknown-linux-gnueabi-c++ NM=arm-unknown-linux-gnueabi-nm OBJDUMP=arm-unknown-linux-gnueabi-objdump RANLIB=arm-unknown-linux-gnueabi-ranlib AR=arm-unknown-linux-gnueabi-ar ./configure --build=x86_64-apple-darwin`uname -r` --host=arm-linux --prefix=/usr/local/arm-linux-libserialport 
+$ git clone git://sigrok.org/libserialport
+$ cd libserialport
+$ ./autogen.sh
+```
+macOS에서 생성하는 경우 : `CC=arm-unknown-linux-gnueabi-gcc CXX=arm-unknown-linux-gnueabi-c++ ./configure --host=arm-unknown-linux-gnueabi --prefix=$HOME/Documents/dev/external/ARM-Linux`
 
-### 설치
-$ sudo make clean
-$ make
+Ubuntu에서 생성하는 경우 : `CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-c++ ./configure --host=arm-linux --prefix=$HOME/Documents/dev/external/ARM-Linux`
+
+Windows(MinGW)에서 생성하는 경우 : `CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-c++ ./configure --host=arm-linux-gnueabihf --prefix=$HOME/Documents/dev/external/ARM-Linux`
+
+```bash
+$ make clean
+$ sudo make
 $ sudo make install
 ```
-
-### Ubuntu(Linux)
-다운로드 후 압축 풀기 및 디렉터리 이동
-* 다운로드 : wget
-* 다운 받을 디렉터리 : /home
-
-```bash
-$ cd /home
-$ wget http://sigrok.org/download/source/libserialport/libserialport-0.1.1.tar.gz
-$ tar -xvf libserialport-0.1.1.tar.gz
-$ cd libserialport-0.1.1
-```
-
-Ubuntu(Linux) 전용 libserialport 라이브러리 생성 명령어
-```bash
-### --prefix : 라이브러리 생성 디렉터리 셋팅
-$ ./configure --prefix=/usr
-$ sudo make clean
-$ make
-$ sudo make install
-```
-
-arm-linux 전용 libserialport 라이브러리 생성 명령어 
-* arm용 log4c 라이브러리를 /usr/libserialport-arm 아래 설치하겠다고 가정
-* armv7용 라이브러리를 설치할 디렉터리 생성 : $ mkdir /usr/arm-linux-libserialport
-```bash
-### 라이브러리 생성관련 셋팅 
-$ CC=arm-linux-gnueabi-gcc CXX=arm-linux-gnueabi-c++ ./configure --build=x86_64-linux-gnu --host=arm-linux --prefix=/usr/arm-linux-libserialport
-
-$ sudo make clean
-$ make
-$ sudo make install
-```
-
-host(arm-linux)와 Cross Toolchain의 host triplet(arm-unknown-linux)이 일치하지 않아서 CC/CXX/LD/NM/OBJDUMP/RANLIB/AR을 직접 지정해주었다. 
-우분투의 경우 host(arm-linux)와 Cross Toolchain의 host triplet(arm-linux)로 일치하기 때문에 CC를 제외하고는 따로 지정해줄 필요가 없다.
-
-### libserialport의 configure 파라미터 정리
-* CC : log4c가 동작할 컴파일러 / 예시) `CC=arm-unknown-linux-gnueabi-gcc`
-
-* CXX : log4c를 CPP 호환성 컴파일러 / 예시) `CXX=arm-unknown-linux-gnueabi-c++`
-
-* LD : 링커 / 예시) `LD=arm-unknown-linux-gnueabi-ld` 
-
-* NM : 메타 정보 표시 / 예시) `NM=arm-unknown-linux-gnueabi-nm`
-
-* OBJDUMP : OBJDUMP / 예시) `OBJDUMP=arm-unknown-linux-gnueabi-objdump` 
-
-* RANLIB : RANLIB / 예시) `RANLIB=arm-unknown-linux-gnueabi-ranlib`
-
-* AR : AR / 예시) `AR=arm-unknown-linux-gnueabi-ar`
-
-* build : 로컬 PC의 커널 정보 / 예시) `--build=x86_64-apple-darwin19.0.0` 
-
-* host : 타겟 컴파일러의 호스트 정보 / 예시) `--host=arm-linux`
-
-* prefix : 생성될 라이브러리를 저장할 디렉터리 지정 / 예시) `--prefix=/usr/local/arm-linux-libserialport`
-
-* without-expat : 모름 / 예시) `--without-expat`
 
 ## CMake
 ### 동적 라이브러리 링크
