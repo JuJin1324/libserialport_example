@@ -3,6 +3,7 @@ project(libserialport_example C)
 
 set(CMAKE_C_STANDARD 99)
 
+################### 사용자 지정 ####################
 ## Build 하여 산출된 응용프로그램이 실행될 운영체제 선택
 ## 주석 시 Host OS / 주석 해제 시 ARM-Linux
 #set(BUILD_FOR_ARM_LINUX ON)

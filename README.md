@@ -98,7 +98,9 @@ external/ARM-Linux/lib 아래 3개의 파일(<b>libserialport.so, libserialport.
 해당 기기의 `/usr/lib`로 복붙 필요함.
 
 ## CMake 정적 라이브러리 링크 : Windows
-<b>[주의!] libserialport를 정적 라이브러리로 사용하여 개발된 상용 프로그램 배포시 소스코드 공개가 의무화됨으로 소스코드 공개가 꺼려지면 동적 라이브러리 링크 사용을 추천</b>   
+<b>[주의!] libserialport를 정적 라이브러리로 사용하여 개발된 상용 프로그램 배포시 소스코드 공개가 의무화됨으로 소스코드 공개가 꺼려지면 
+동적 라이브러리 링크 사용을 추천</b>   
+
 add_executable 실행파일명 예시 : `application`   
 * ${CMAKE_SOURCE_DIR} : 현재 프로젝트 디렉터리
 * ${CMAKE_HOST_SYSTEM_NAME} : 현재 CMake가 동작하는 운영체제 명(예시 : Darwin, Linux, Windows), (Darwin = macOS)
