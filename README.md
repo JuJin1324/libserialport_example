@@ -66,7 +66,7 @@ $ sudo make install
 ## CMake : 동적 라이브러리 링크 
 add_executable 실행파일명 예시 : `application`   
 * ${CMAKE_SOURCE_DIR} : 현재 프로젝트 디렉터리
-* ${CMAKE_HOST_SYSTEM_NAME} : 현재 CMake가 동작하는 운영체제 명(예시 : Darwin, Linux, Windows), Darwin은 macOS
+* ${CMAKE_HOST_SYSTEM_NAME} : 현재 CMake가 동작하는 운영체제 명(예시 : Darwin, Linux, Windows), (Darwin = macOS)
 * target_link_libraries()는 add_executable() 아래에 위치 시킨다.
 
 ```cmake
