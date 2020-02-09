@@ -133,3 +133,7 @@ target_link_libraries(application ${SETUPAPI} ${SERIALPORT})
 ## CMake 정적 라이브러리 링크 : macOS / Linux
 macOS / Linux의 경우에도 다른 라이브러리(Windows에서 추가했던 libsetupapi)를 추가해야하지만 동적 라이브러리 사용시에 
 Windows 처럼 .dll 파일을 실행파일과 같은 위치에 놓을 필요가 없기 때문에 굳이 정적 라이브러리를 사용하지 않고 동적 라이브러리를 사용하였다...
+
+## 라이브러리 변경 시 주의 사항 
+CMakeLists.txt 파일에서 라이브러리 관련 변경 후 상단 메뉴바 Tools -> CMake -> <b>Reset Cache and Reload Project</b> 
+및 Build -> Build Project 를 통한 재빌드 실행
