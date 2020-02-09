@@ -63,31 +63,66 @@ $ sudo make
 $ sudo make install
 ```
 
-## CMake
-### 동적 라이브러리 링크
-add_executable 실행파일 명이 `application.out`으로 가정
+## CMake : 동적 라이브러리 링크 
+add_executable 실행파일명 예시 : `application`   
+* ${CMAKE_SOURCE_DIR} : 현재 프로젝트 디렉터리
+* ${CMAKE_HOST_SYSTEM_NAME} : 현재 CMake가 동작하는 운영체제 명(예시 : Darwin, Linux, Windows), Darwin은 macOS
+* target_link_libraries()는 add_executable() 아래에 위치 시킨다.
 
-로컬 x86_64에서 실행시 
 ```cmake
-target_link_libraries(application.out -L/usr/local/lib serialport)
+set(EXTERNAL_LIB_ROOT ${CMAKE_SOURCE_DIR}/external/${CMAKE_HOST_SYSTEM_NAME})
+set(EXTERNAL_INCLUDE_DIR ${EXTERNAL_LIB_ROOT}/include)
+set(EXTERNAL_LIB_DIR ${EXTERNAL_LIB_ROOT}/lib)
+
+include_directories(${EXTERNAL_INCLUDE_DIR})
+
+find_library(
+            SERIALPORT
+            NAMES serialport
+            PATHS ${EXTERNAL_LIB_DIR}
+            REQUIRED)
+
+## target_link_libraries()는 add_executable() 아래에 위치 시킨다.
+target_link_libraries(application ${SERIALPORT})
 ```
 
-* arm-linux 컴파일러를 사용하는 기기에서 해당 라이브러리를 동적으로 사용하기 위해서 로컬(/usr/local/arm-linux-libserialport/lib)에 있는 모든 파일을 해당 기기의 `/usr/lib`로 복사 / 붙여넣기
-* arm-linux에서 실행시 
+### Windows에서 동적 라이브러리 사용시 주의
+Windows에서 동적 라이브러리를 통해 링크할 경우 external/Windows/bin 아래 <b>libserialport-0.dll</b> 파일이 실행 파일과 같은 곳에 위치하도록 복붙 필요함.
+
+## ARM-Linux 기기에서 동적 라이브러리 사용시 주의
+external/ARM-Linux/lib 아래 3개의 파일(libserialport.so, libserialport.so.0, libserialport.so.0.1.0)을 
+해당 기기의 `/usr/lib`로 복붙
+
+## CMake 정적 라이브러리 링크 : Windows
+<b>[주의!] libserialport를 정적 라이브러리로 사용하여 개발된 상용 프로그램 배포시 소스코드 공개가 의무화됨으로 소스코드 공개가 꺼려지면 동적 라이브러리 링크 사용을 추천</b>   
+add_executable 실행파일명 예시 : `application`   
+* ${CMAKE_SOURCE_DIR} : 현재 프로젝트 디렉터리
+* ${CMAKE_HOST_SYSTEM_NAME} : 현재 CMake가 동작하는 운영체제 명(예시 : Darwin, Linux, Windows), Darwin은 macOS
+* target_link_libraries()는 add_executable() 아래에 위치 시킨다.
+* Windows의 경우 libserialport를 정적라이브러리로 사용시에 libsetupapi 라이브러리와 함께 사용해야함.
+
 ```cmake
-target_link_libraries(application.out -L/usr/local/arm-linux-libserialport/lib serialport)
+set(EXTERNAL_LIB_ROOT ${CMAKE_SOURCE_DIR}/external/${CMAKE_HOST_SYSTEM_NAME})
+set(EXTERNAL_INCLUDE_DIR ${EXTERNAL_LIB_ROOT}/include)
+set(EXTERNAL_LIB_DIR ${EXTERNAL_LIB_ROOT}/lib)
+
+include_directories(${EXTERNAL_INCLUDE_DIR})
+
+find_library(
+        SETUPAPI
+        NAMES setupapi
+        PATHS /usr/lib
+)
+find_library(
+        SERIALPORT
+        NAMES libserialport.a
+        PATHS ${EXTERNAL_LIB_DIR}
+        REQUIRED)
+
+## target_link_libraries()는 add_executable() 아래에 위치 시킨다.
+target_link_libraries(application ${SETUPAPI} ${SERIALPORT})
 ```
 
-### [주의!]정적 라이브러리 링크 
-<b>[주의!] log4c를 정적 라이브러리로 사용하게 되면 소스코드 공개가 의무화됨으로 소스코드 공개가 꺼려지면 동적 라이브러리 링크 사용을 추천</b>
-* add_executable 실행파일 명이 `application.out`으로 가정
-* arm-linux용 정적 라이브러리인 `libserialport.a`가 `/usr/local/arm-linux-libserialport/lib` 아래 있다고 가정
-```cmake
-target_link_libraries(application.out /usr/local/arm-linux-libserialport/lib/libserialport.a)
-```
-
-### 크로스 컴파일 선택
-다음의 셋팅을 주석 처리 혹은 주석 풀기를 통해서 arm-linux 로 컴파일 할지 x86_64 로 컴파일할지 선택 
-```cmake
-set(ARM_LINUX_COMPILE ON)
-```
+### macOS / Linux 에서 정적 라이브러리 사용시 주의
+macOS / Linux의 경우에도 다른 라이브러리를 추가해야하지만 동적 라이브러리 사용시에 Windows 처럼 .dll 파일을 실행파일과 같은 위치에 놓을 필요가 없기 
+때문에 굳이 정적 라이브러리를 사용하지 않고 동적 라이브러리를 사용하였다...
