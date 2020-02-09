@@ -44,6 +44,10 @@ $ sudo make install
 ```
 
 ## 실행 환경(Target OS)이 arm-linux인 라이브러리 생성
+ARM-Linux 컴파일용 라이브러리를 설치하기 위해서는 ARM-Linux 전용 GCC가 필요하다. 
+해당 파일의 설치 및 CMake 선언에 관해서는 [참조사이트](https://github.com/JuJin1324/cmake-starter#arm-linux-toolchain-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0--macos)
+에서 OS에 맞는 <b>ARM-Linux Toolchain 사용하기</b>를 통해서 따라하기
+
 ### 라이브러리 생성 
 * --prefix : 산출물을 담을 디렉터리 경로(여기서는 ~/Documents/dev/external/ARM-Linux 아래 설치)
 ```bash
