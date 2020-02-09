@@ -49,6 +49,7 @@ ARM-Linux 컴파일용 라이브러리를 설치하기 위해서는 ARM-Linux �
 에서 OS에 맞는 <b>ARM-Linux Toolchain 사용하기</b>를 통해서 따라하기
 
 ### 라이브러리 생성 
+* --host : 산출될 라이브러리가 구동될 툴체인의 prefix(gcc 앞에 붙는 prefix)
 * --prefix : 산출물을 담을 디렉터리 경로(여기서는 ~/Documents/dev/external/ARM-Linux 아래 설치)
 ```bash
 $ git clone git://sigrok.org/libserialport
