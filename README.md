@@ -90,7 +90,7 @@ target_link_libraries(application ${SERIALPORT})
 Windows에서 동적 라이브러리를 통해 링크할 경우 external/Windows/bin 아래 <b>libserialport-0.dll</b> 파일이 실행 파일과 같은 곳에 위치하도록 복붙 필요함.
 
 ### ARM-Linux 기기에서 동적 라이브러리 사용시 주의
-external/ARM-Linux/lib 아래 3개의 파일(libserialport.so, libserialport.so.0, libserialport.so.0.1.0)을 
+external/ARM-Linux/lib 아래 3개의 파일(<b>libserialport.so, libserialport.so.0, libserialport.so.0.1.0</b>)을 
 해당 기기의 `/usr/lib`로 복붙 필요함.
 
 ## CMake 정적 라이브러리 링크 : Windows
